@@ -32,6 +32,19 @@ class EntidadeBibliografica {
   }
 }
 
+class Revista extends EntidadeBibliografica{
+  constructor(titulo, autor, anoPublicado, codigo) {
+    super(titulo, autor, anoPublicado, codigo);
+  }
+
+  informacoes(){
+    console.log('Titulo da revista ' +this.titulo)
+    console.log('Autor ' +this.autor)
+    console.log('Ano Publicado ' +this.anoPublicado)
+    console.log('Codigo '  +this.codigo)
+  }
+}
+
 class Livro extends EntidadeBibliografica {
   constructor(titulo, autor, anoPublicado, codigo, genero) {
     super(titulo, autor, anoPublicado, codigo);
@@ -46,8 +59,9 @@ class Livro extends EntidadeBibliografica {
     console.log('Genero '  +this.genero)
   }
 }
-
-
+var revista = new Revista();
+var entidadebiblioteca = new EntidadeBibliografica();
+var livro = new Livro();
 
 class Usuario {
   constructor(nome, registroAcademico, dataNascimento) {
@@ -56,10 +70,6 @@ class Usuario {
     this.dataNascimento = dataNascimento
   }
 }
-var biblioteca = new EntidadeBibliografica();
-var livro = new Livro();
-
-
 
 class Biblioteca {
   constructor(acervo,usuarios){
@@ -69,6 +79,7 @@ class Biblioteca {
 
   adicionarItem(item){
     this.acervo.push(item)
+    console.log(this.acervo)
   }
 
   listarAcervo()
@@ -79,5 +90,25 @@ class Biblioteca {
     })
   }
 
+  adicionarUsuario(usuario){
+    this.usuarios.push(usuario)
+  }
 
+  emprestarItem(codigo,usuario){
+    this.acervo.forEach(function(item){
+      if(item.codigo === codigo){
+        item.emprestar(usuario)
+      }
+    })
+  }
+
+  devolverItem(codigo){
+    this.acervo.forEach(function(item){
+      if(item.codigo === codigo){
+        item.devolver()
+      }
+    })
+  }
 }
+
+var biblioteca = new Biblioteca();
