@@ -1,3 +1,44 @@
+class Biblioteca {
+  constructor() {
+      this.acervo = [];
+      this.usuarios = [];
+      this.ApiAcervo();
+      this.ApiUsuarios();
+  }
+
+  async ApiAcervo() {
+      try {
+          const response = await fetch('https://api-biblioteca-mb6w.onrender.com/acervo');
+          const data = await response.json();
+          this.acervo = data;
+          // console.log(this.acervo);
+      } catch (error) {
+          console.error('Erro ao carregar dados do acervo:', error);
+      }
+  }
+
+  async ApiUsuarios() {
+      try {
+          const response = await fetch('https://api-biblioteca-mb6w.onrender.com/users');
+          const data = await response.json();
+          this.usuarios = data;
+          // console.log(this.usuarios);
+      } catch (error) {
+          console.error('Erro ao carregar dados dos usuários:', error);
+      }
+  }
+
+  popularAcervo(itens){
+    this.acervo = itens;
+    console.log('Itens do acervo' +itens)
+  }
+
+  adicionarItem(item){
+    this.acervo.push(item);
+    console.log('Item adicionado ao acervo:', item);
+  }
+}
+
 class EntidadeBibliografica {
 
   constructor(titulo, autor, anoPublicado, codigo) {
@@ -32,16 +73,16 @@ class EntidadeBibliografica {
   }
 }
 
-class Revista extends EntidadeBibliografica{
+class Revista extends EntidadeBibliografica {
   constructor(titulo, autor, anoPublicado, codigo) {
     super(titulo, autor, anoPublicado, codigo);
   }
 
-  informacoes(){
-    console.log('Titulo da revista ' +this.titulo)
-    console.log('Autor ' +this.autor)
-    console.log('Ano Publicado ' +this.anoPublicado)
-    console.log('Codigo '  +this.codigo)
+  informacoes() {
+    console.log('Titulo da revista ' + this.titulo)
+    console.log('Autor ' + this.autor)
+    console.log('Ano Publicado ' + this.anoPublicado)
+    console.log('Codigo ' + this.codigo)
   }
 }
 
@@ -51,17 +92,14 @@ class Livro extends EntidadeBibliografica {
     this.genero = genero
   }
 
-  informacoes(){
-    console.log('Titulo do livro ' +this.titulo)
-    console.log('Autor ' +this.autor)
-    console.log('Ano Publicado ' +this.anoPublicado)
-    console.log('Codigo '  +this.codigo)
-    console.log('Genero '  +this.genero)
+  informacoes() {
+    console.log('Titulo do livro ' + this.titulo)
+    console.log('Autor ' + this.autor)
+    console.log('Ano Publicado ' + this.anoPublicado)
+    console.log('Codigo ' + this.codigo)
+    console.log('Genero ' + this.genero)
   }
 }
-var revista = new Revista();
-var entidadebiblioteca = new EntidadeBibliografica();
-var livro = new Livro();
 
 class Usuario {
   constructor(nome, registroAcademico, dataNascimento) {
@@ -71,106 +109,7 @@ class Usuario {
   }
 }
 
-class Biblioteca {
-  constructor(acervo,usuarios){
-    this.acervo = []
-    this.usuarios = []
-  }
-
-  adicionarItem(item){
-    this.acervo.push(item)
-    console.log(this.acervo)
-  }
-
-  listarAcervo()
-  {
-    console.log('Acervo')
-    this.acervo.forEach(function(item){
-      console.log(item)
-    })
-  }
-
-  adicionarUsuario(usuario){
-    this.usuarios.push(usuario)
-  }
-
-  emprestarItem(codigo,usuario){
-    this.acervo.forEach(function(item){
-      if(item.codigo === codigo){
-        item.emprestar(usuario)
-      }
-    })
-  }
-
-  devolverItem(codigo){
-    this.acervo.forEach(function(item){
-      if(item.codigo === codigo){
-        item.devolver()
-      }
-    })
-  }
-}
-
-var biblioteca = new Biblioteca();const fetch = require('node-fetch');
-
-class Biblioteca {
-  constructor() {
-    this.acervo = [];
-    this.usuarios = [];
-  }
-
-  async carregarAcervo() {
-    try {
-      const response = await fetch('https://api-biblioteca-mb6w.onrender.com/acervo');
-      const data = await response.json();
-      this.acervo = data;
-      console.log('Acervo carregado com sucesso');
-    } catch (error) {
-      console.error('Erro ao carregar o acervo:', error);
-    }
-  }
-
-  async carregarUsuarios() {
-    try {
-      const response = await fetch('https://api-biblioteca-mb6w.onrender.com/users');
-      const data = await response.json();
-      this.usuarios = data;
-      console.log('Usuários carregados com sucesso');
-    } catch (error) {
-      console.error('Erro ao carregar os usuários:', error);
-    }
-  }
-
-  adicionarItem(item) {
-    this.acervo.push(item);
-    console.log('Item adicionado ao acervo:', item);
-  }
-
-  listarAcervo() {
-    console.log('Acervo:');
-    this.acervo.forEach(function (item) {
-      console.log(item);
-    });
-  }
-
-  adicionarUsuario(usuario) {
-    this.usuarios.push(usuario);
-    console.log('Usuário adicionado:', usuario);
-  }
-
-  emprestarItem(codigo, usuario) {
-    this.acervo.forEach(function (item) {
-      if (item.codigo === codigo) {
-        item.emprestar(usuario);
-      }
-    });
-  }
-
-  devolverItem(codigo) {
-    this.acervo.forEach(function (item) {
-      if (item.codigo === codigo) {
-        item.devolver();
-      }
-    });
-  }
-}
+var biblioteca = new Biblioteca();
+var entidadebiblioteca = new EntidadeBibliografica();
+var revista = new Revista();
+var livro = new Livro();
