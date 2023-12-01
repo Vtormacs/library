@@ -1,5 +1,17 @@
+const GeneroLivro = {
+  TEXTOS_RELIGIOSOS: "Textos Religiosos",
+  TERROR: "Terror",
+  COMEDIA: "Comédia",
+  COMEDIA_ROMANTICA: "Comédia Romantica",
+  SUSPENCE: "Suspence",
+  DRAMA: "Drama",
+  HISTORIA: "Historia",
+  POLICIAL: "Policial",
+  FICCAO_CIENTIFICA: "Ficção Cientifica"
+}
+
 class Biblioteca {
-  constructor() {
+  constructor(acervo,usuarios) {
       this.acervo = [];
       this.usuarios = [];
       this.ApiAcervo();
@@ -11,7 +23,7 @@ class Biblioteca {
           const response = await fetch('https://api-biblioteca-mb6w.onrender.com/acervo');
           const data = await response.json();
           this.acervo = data;
-          // console.log(this.acervo);
+          console.log(this.acervo);
       } catch (error) {
           console.error('Erro ao carregar dados do acervo:', error);
       }
@@ -22,22 +34,62 @@ class Biblioteca {
           const response = await fetch('https://api-biblioteca-mb6w.onrender.com/users');
           const data = await response.json();
           this.usuarios = data;
-          // console.log(this.usuarios);
+          console.log(this.usuarios);
       } catch (error) {
           console.error('Erro ao carregar dados dos usuários:', error);
       }
   }
 
-  popularAcervo(itens){
-    this.acervo = itens;
-    console.log('Itens do acervo' +itens)
+  popularAcervo(acervoAPI){
+    acervoAPI.forEach(item => {
+      if(item.entidadebiblioteca === "Livro"){
+        this.acervo.push(new Livro(item.titulo,item.autor,item.anoPublicado,item.codigo,item.genero))
+      }
+      else if(item.entidadebiblioteca === "Revista"){
+        this.acervo.push(new Revista(item.titulo,item.autor,item.anoPublicado,item.codigo,item.edicao))
+      }
+    });
   }
 
   adicionarItem(item){
     this.acervo.push(item);
     console.log('Item adicionado ao acervo:', item);
   }
+
+  listarAcervo(){
+    console.log("Biblioteca acervo")
+    if(this.acervo.length == 0){
+      console.log("Acervo vazio")
+    }
+    else{
+      this.acervo.forEach(item => {
+        const infoUsuario = item.usuarioEmprestimo ? 'Emprestado para: $(item.usuarioEmprestimo.nome)'
+      :
+      'Disponivel';console.log (item.titulo + 'codigo:' +item.codigo)
+      })
+    }
+  }
+
+  adicionarUsuario(usuario){
+    this.usuarios.push(usuario)
+    console.log('usuario' + usuario.nome + 'foi adicionado a biblioteca')
+  }
+
+  emprestarItem(codigo, registroAcademico){
+    const item = this.acervo.find(item => item.codigo === codigo)
+
+    if(item){
+      const usuarioEmprestimo = this.usuarios.find(this.usuario => usuario.registroAcademico)
+    }
+
+  }
+
+  devolverItem(){
+
+  }
 }
+
+
 
 class EntidadeBibliografica {
 
@@ -54,7 +106,7 @@ class EntidadeBibliografica {
     if (this.emprestado === false) {
       this.emprestado = true
       this.usuarioEmprestimo = usuario
-      console.log('Livro emprestado')
+      console.log("O" + this.titulo + "foi emprestado para " + usuario.nome)
     }
     else if (this.emprestado === true) {
       console.log('Livro já foi emprestado')
@@ -65,7 +117,7 @@ class EntidadeBibliografica {
     if (this.emprestado === true) {
       this.emprestado = false
       this.usuarioEmprestimo = null
-      console.log('livro devolvido')
+      console.log("O" + this.titulo + 'foi devolvido')
     }
     else if (this.emprestado === false) {
       console.log('livro já foi devolvido')
@@ -74,8 +126,9 @@ class EntidadeBibliografica {
 }
 
 class Revista extends EntidadeBibliografica {
-  constructor(titulo, autor, anoPublicado, codigo) {
+  constructor(titulo, autor, anoPublicado, codigo,edicao) {
     super(titulo, autor, anoPublicado, codigo);
+    this.edicao = edicao
   }
 
   informacoes() {
