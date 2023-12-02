@@ -14,32 +14,10 @@ class Biblioteca {
   constructor(acervo,usuarios) {
       this.acervo = [];
       this.usuarios = [];
-      this.ApiAcervo();
+      this.obterDadosDaAPI();
       this.ApiUsuarios();
   }
-
-  async ApiAcervo() {
-      try {
-          const response = await fetch('https://api-biblioteca-mb6w.onrender.com/acervo');
-          const data = await response.json();
-          this.acervo = data;
-          console.log(this.acervo);
-      } catch (error) {
-          console.error('Erro ao carregar dados do acervo:', error);
-      }
-  }
-
-  async ApiUsuarios() {
-      try {
-          const response = await fetch('https://api-biblioteca-mb6w.onrender.com/users');
-          const data = await response.json();
-          this.usuarios = data;
-          console.log(this.usuarios);
-      } catch (error) {
-          console.error('Erro ao carregar dados dos usuários:', error);
-      }
-  }
-
+  
   popularAcervo(acervoAPI){
     acervoAPI.forEach(item => {
       if(item.entidadebiblioteca === "Livro"){
@@ -56,36 +34,49 @@ class Biblioteca {
     console.log('Item adicionado ao acervo:', item);
   }
 
-  listarAcervo(){
-    console.log("Biblioteca acervo")
-    if(this.acervo.length == 0){
-      console.log("Acervo vazio")
-    }
-    else{
-      this.acervo.forEach(item => {
-        const infoUsuario = item.usuarioEmprestimo ? 'Emprestado para: $(item.usuarioEmprestimo.nome)'
-      :
-      'Disponivel';console.log (item.titulo + 'codigo:' +item.codigo)
-      })
-    }
+  listarAcervo() {
+  console.log("Biblioteca acervo");
+  if (this.acervo.length === 0) {
+    console.log("Acervo vazio");
+  } else {
+    this.acervo.forEach(item => {
+      const infoUsuario = item.usuarioEmprestimo ? `Emprestado para: ${item.usuarioEmprestimo.nome}` : 'Disponivel';
+      console.log(`${item.titulo} codigo: ${item.codigo}`);
+    });
   }
-
+}
   adicionarUsuario(usuario){
     this.usuarios.push(usuario)
     console.log('usuario' + usuario.nome + 'foi adicionado a biblioteca')
   }
 
-  emprestarItem(codigo, registroAcademico){
+  emprestarItem(itemCode, academicRegistration) {
+  const itemToLend = this.acervo.find(item => item.codigo === itemCode);
+
+  if (itemToLend) {
+    const userToLend = this.usuarios.find(user => user.registroAcademico === academicRegistration);
+
+    if (userToLend) {
+      itemToLend.emprestar(userToLend);
+      console.log('Item emprestado');
+    } else {
+      console.log('Usuário ' + academicRegistration + ' não encontrado');
+    }
+  } else {
+    console.log('Item ' + itemCode + ' não encontrado');
+  }
+}
+
+  devolverItem(){
     const item = this.acervo.find(item => item.codigo === codigo)
 
     if(item){
-      const usuarioEmprestimo = this.usuarios.find(this.usuario => usuario.registroAcademico)
+      item.devolver()
+      console.log('Item devolvido')
     }
-
-  }
-
-  devolverItem(){
-
+    else {
+  console.log("Item " + codigo + " não encontrado");
+    }
   }
 }
 
