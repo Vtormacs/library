@@ -18,13 +18,15 @@ class Biblioteca {
 
   popularAcervo(APIreturn) {
     APIreturn.forEach(item => {
-      if (item.entidadeBibliografica === "Livro") {
-        this.acervo.push(new Livro(item.codigo,item.titulo, item.autor, item.anoPublicação, item.isEmprestado, item.usuarioEmprestado, item.genero));
-      }
-      else if (item.entidadeBibliografica === "Revista") {
-        this.acervo.push(new Revista(item.codigo,item.titulo, item.autor, item.anoPublicação, item.isEmprestado, item.usuarioEmprestado, item.edicao));
-      }
-    });
+      if(item.entidadeBibliografica === "Livro")
+            {
+                this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicação, item.isEmprestado, item.usuarioEmprestado, item.genero));
+            }
+            else if(item.entidadeBibliografica === "Revista")
+            {
+                this.acervo.push(new Revista(item.codigo, item.titulo, item.autor, item.anoPublicação, item.isEmprestado, item.usuarioEmprestado, item.edicao));
+            }
+        });
   }
 
   adicionarItem(item) {
