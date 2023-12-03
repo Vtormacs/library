@@ -51,13 +51,13 @@ class Biblioteca {
   }
 
   emprestarItem(itemCode, academicRegistration) {
-  const itemToLend = this.acervo.find(item => item.codigo === itemCode);
+  const itemParaEmprestar = this.acervo.find(item => item.codigo === itemCode);
 
-  if (itemToLend) {
-    const userToLend = this.usuarios.find(user => user.registroAcademico === academicRegistration);
+  if (itemParaEmprestar) {
+    const userParaEmprestar = this.usuarios.find(user => user.registroAcademico === academicRegistration);
 
-    if (userToLend) {
-      itemToLend.emprestar(userToLend);
+    if (userParaEmprestar) {
+      itemParaEmprestar.emprestar(userParaEmprestar);
       console.log('Item emprestado');
     } else {
       console.log('Usuário ' + academicRegistration + ' não encontrado');
