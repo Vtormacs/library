@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sistema Bibliotecário</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/bliblioteca.js"></script>
+    
+</head>
+<body>
+    <h1>Sistema Bibliotecário</h1>    
+
+    <button onclick="adicionarLivro()">Adicionar Livro</button>
+    <button onclick="adicionarRevista()">Adicionar Revista</button>
+    <button>Emprestar</button>
+    <button>Devolver</button>
+    <button onclick="listarAcervo()">Listar Acervo</button>
+    <button>Chamar API (acervo)</button>
+    <button>Chamar API (usuario)</button>
+
+
+    <script>
+        const usuarioteste = new Usuario('Usuário Teste', '12345678900', '1990-05-15');
+        const usuarioteste2 = new Usuario('Usuário Teste 2', '88888888', '1880-08-18');
+
+        const biblioteca = new Biblioteca();
+
+        function adicionarLivro(){
+            const codigo = prompt('Digite o código do livro');
+            const titulo = prompt('Digite o título do livro');
+            const autor = prompt('Digite o autor do livro');
+            const ano = prompt('Digite o ano do livro');
+            const genero = prompt('Digite o gênero do livro');
+
+            const livro = new Livro(codigo, titulo, autor, ano, genero);
+
+            biblioteca.adicionarItem(livro);
+        }
+
+        function adicionarRevista(){
+            const codigo = prompt('Digite o código da revista');
+            const titulo = prompt('Digite o título da revista');
+            const autor = prompt('Digite o autor da revista');
+            const ano = prompt('Digite o ano da revista');
+            const edicao = prompt('Digite a edição da revista');
+
+            const revista = new Revista(codigo, titulo, autor, ano, edicao);
+
+            biblioteca.adicionarRevista(revista);
+        }
+
+        function adicionarUsuarioTESTE(){
+            const nome = prompt('Digite o nome do usuário');
+            const registroAcademico = prompt('Digite o registro acadêmico do usuário');
+            const dataNascimento = prompt('Digite a data de nascimento do usuário');
+
+            const usuario = new Usuario(nome, registroAcademico, dataNascimento);
+
+            biblioteca.adicionarUsuario(usuario);
+        }
+
+         
+        async function obterDadosAPI(){
+            try {
+                const resposta = await fetch('https://api-biblioteca-mb6w.onrender.com/acervo');
+                const dados = await resposta.json();
+                return dados;
+            }
+            catch (erro) {
+                console.error(erro);
+                return [];
+            }
+        }
+
+        async function userAPI(){
+            try {
+                const resposta = await fetch('https://api-biblioteca-mb6w.onrender.com/users');
+                const dados = await resposta.json();
+                return dados;
+            }
+            catch (erro) {
+                console.error(erro);
+                return [];
+            }
+        }
+
+        async function iniciarAcervo(){
+            const acervo = await obterDadosAPI();
+            const usuarios = await userAPI();
+
+            await biblioteca.popularAcervo(acervo, usuarios);
+        }
+        iniciarAcervo()
+
+    </script>
+</body>
+</html>

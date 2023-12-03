@@ -1,13 +1,5 @@
-const usuario1 = new Usuario("Vitor Eduardo", "505071", "2002-08-08")
-const usuario2 = new Usuario("Jaqueline", "404012", "2002-02-03" )
 
-const biblioteca = new Biblioteca()
-
-biblioteca.adicionarUsuario(usuario1)
-biblioteca.adicionarUsuario(usuario2)
-
-
-async function obterDadosDaAPI() {
+async function acervoAPI() {
     try {
         const response = await fetch('https://api-biblioteca-mb6w.onrender.com/acervo');
         const acervoAPI = await response.json();
@@ -28,3 +20,11 @@ async function ApiUsuarios() {
         return []
     }
 }
+
+async function iniciarAcervo(){
+    const acervo = await acervoAPI();
+    const usuarios = await ApiUsuarios();
+
+    await biblioteca.popularAcervo(acervo, usuarios);
+}
+iniciarAcervo()
