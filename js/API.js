@@ -1,12 +1,12 @@
 
-async function acervoAPI() {
+async function obterDadosDaAPI() {
     try {
         const response = await fetch('https://api-biblioteca-mb6w.onrender.com/acervo');
         const acervoAPI = await response.json();
-        return acervoAPI
+        return acervoAPI;
     } catch (error) {
         console.error('Erro ao carregar dados do acervo:', error);
-        return []
+        return [];
     }
 }
 
@@ -22,9 +22,9 @@ async function ApiUsuarios() {
 }
 
 async function iniciarAcervo(){
-    const acervo = await acervoAPI();
+    const acervoAPI = await obterDadosDaAPI();
     const usuarios = await ApiUsuarios();
 
-    await biblioteca.popularAcervo(acervo, usuarios);
+    await biblioteca.popularAcervo(acervoAPI);
 }
 iniciarAcervo()

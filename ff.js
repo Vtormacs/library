@@ -128,51 +128,38 @@ class Biblioteca{
 
     adicionarItem(item){
         this.acervo.push(item);
-        console.log(Item ${item.nome} adicionado ao acervo)
+        console.log(`Item ${item.nome} adicionado ao acervo`);
     }
 
     adicionarUsuario(usuario){
         this.usuarios.push(usuario);
-        console.log(Usuário ${usuario.nome} adicionado ao sistema)
+        console.log(`Usuário ${usuario.nome} adicionado ao sistema`);
     }
 
-    listarAcervo(){
-        console.log("Acervo da Biblioteca:");
-        if (this.acervo.length > 0){
-            this.acervo.forEach(item => {
-                const infoUsuario = item.usuarioEmprestado 
-                ? Emprestado para ${item.usuarioEmprestado.nome}
-                :'Disponível';
-                console.log(Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicação} | ${infoUsuario})
-            });
-        }
-        else{
-            console.log("Acervo vazio");
-        }
+    listarAcervo() {
+    console.log("Acervo da Biblioteca:");
+    if (this.acervo.length > 0) {
+        this.acervo.forEach(item => {
+            const infoUsuario = item.usuarioEmprestado ? `Emprestado para ${item.usuarioEmprestado.nome}` : 'Disponível';
+            console.log(`Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicação} | ${infoUsuario}`);
+        });
+    } else {
+        console.log("Acervo vazio");
     }
+}
 
-    emprestarItem(codigoItem, registroAcademicoUsuario){
-        const item = this.acervo.find(item => item.codigo === codigoItem);
-        
-        if(item)
-        {
-            const usuario = this.usuarios.find(usuario => usuario.registroAcademico === registroAcademicoUsuario);
+    emprestarItem(codigoItem, registroAcademicoUsuario) {
+    const item = this.acervo.find(item => item.codigo === codigoItem);
+    const usuario = this.usuarios.find(usuario => usuario.registroAcademico === registroAcademicoUsuario);
 
-            if (usuario){
-                item.emprestar(usuario);
-                console.log(Item ${item.titulo} emprestado para ${usuario.nome});
-            }
-            else{
-                console.log("Usuário não encontrado");
-                alert("Usuário não encontrado");
-            }
-        }
-        else
-        {
-            console.log("Item não encontrado");
-            alert("Item não encontrado");
-        }
+    if (item && usuario) {
+        item.emprestar(usuario);
+        console.log(`Item ${item.titulo} emprestado para ${usuario.nome}`);
+    } else {
+        console.log("Item ou usuário não encontrado");
+        alert("Item ou usuário não encontrado");
     }
+}
 
     devolverItem(codigoItem){
         let item = this.acervo.find(item => item.codigo === codigoItem);
