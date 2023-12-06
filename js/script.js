@@ -1,10 +1,10 @@
 iniciarAcervo()
 class EntidadeBibliografica {
-  constructor(titulo, autor, anoPublicacao, codigo) {
+  constructor(codigo,titulo, autor, anoPublicacao) {
+    this.codigo = codigo;
     this.titulo = titulo;
     this.autor = autor;
     this.anoPublicacao = anoPublicacao;
-    this.codigo = codigo;
     this.emprestado = false;
     this.usuarioEmprestimo = null;
   }
@@ -33,8 +33,8 @@ class EntidadeBibliografica {
 }
 
 class Livro extends EntidadeBibliografica {
-  constructor(titulo, autor, anoPublicacao, codigo, genero) {
-    super(titulo, autor, anoPublicacao, codigo);
+  constructor(codigo,titulo, autor, anoPublicacao, genero) {
+    super(codigo,titulo, autor, anoPublicacao);
     this.genero = genero;
   }
 
@@ -51,8 +51,8 @@ class Livro extends EntidadeBibliografica {
 }
 
 class Revista extends EntidadeBibliografica {
-  constructor(titulo, autor, anoPublicacao, codigo, edicao) {
-    super(titulo, autor, anoPublicacao, codigo);
+  constructor(codigo,titulo, autor, anoPublicacao, edicao) {
+    super(codigo,titulo, autor, anoPublicacao);
     this.edicao = edicao;
   }
 
@@ -97,9 +97,9 @@ class Biblioteca {
   popularAcervo(APIreturnAcervo, APIreturnUsuario) {
   APIreturnAcervo.forEach(item => {
     if (item.entidadeBibliografica === "Livro") {
-      this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicação, item.isEmprestado, item.usuarioEmprestado, item.genero));
+      this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.isEmprestado, item.usuarioEmprestado, item.genero));
     } else if (item.entidadeBibliografica === "Revista") {
-      this.acervo.push(new Revista(item.codigo, item.titulo, item.autor, item.anoPublicação, item.isEmprestado, item.usuarioEmprestado, item.edicao));
+      this.acervo.push(new Revista(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.isEmprestado, item.usuarioEmprestado, item.edicao));
     }
   });
 
@@ -118,7 +118,7 @@ listarAcervo() {
   if (this.acervo.length > 0) {
     this.acervo.forEach(item => {
       const infoUsuario = item.usuarioEmprestado ? `Emprestado para ${item.usuarioEmprestado.nome}` : 'Disponível';
-      console.log(`Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicação} | ${infoUsuario}`);
+      console.log(`Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicacao} | ${infoUsuario}`);
     });
   } else {
     console.log("Acervo vazio");
@@ -176,10 +176,10 @@ biblioteca.adicionarUsuario(usuario2)
 
 
 function adicionarLivro() {
+  const titulo = prompt('Digite o título do livro');
+  const autor = prompt('Digite o autor do livro');
+  const ano = prompt('Digite o ano do livro');
     const codigo = prompt('Digite o código do livro');
-    const titulo = prompt('Digite o título do livro');
-    const autor = prompt('Digite o autor do livro');
-    const ano = prompt('Digite o ano do livro');
     const genero = prompt('Digite o gênero do livro');
 
     const livro = new Livro(codigo, titulo, autor, ano, genero);
