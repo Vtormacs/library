@@ -144,10 +144,10 @@ listarUsuarios(){
     const itemParaEmprestar = this.acervo.find(item => item.codigo === itemCode);
 
     if (itemParaEmprestar) {
-      const userParaEmprestar = this.usuarios.find(user => user.registroAcademico === academicRegistration);
+      const usuarioEmpretimo = this.usuarios.find(user => user.registroAcademico === academicRegistration);
 
-      if (userParaEmprestar) {
-        itemParaEmprestar.emprestar(userParaEmprestar);
+      if (usuarioEmpretimo) {
+        itemParaEmprestar.emprestar(usuarioEmpretimo);
         console.log('Item emprestado');
       } else {
         console.log('Usuário ' + academicRegistration + ' não encontrado');
