@@ -1,4 +1,3 @@
-iniciarAcervo()
 class EntidadeBibliografica {
   constructor(codigo,titulo, autor, anoPublicacao) {
     this.codigo = codigo;
@@ -114,7 +113,7 @@ adicionarItem(item) {
 }
 
 listarAcervo() {
-  console.log("Acervo da Biblioteca:");
+  console.log("Livros da Biblioteca:");
   if (this.acervo.length > 0) {
     this.acervo.forEach(item => {
       const infoUsuario = item.usuarioEmprestado ? `Emprestado para ${item.usuarioEmprestado.nome}` : 'Disponível';
@@ -125,9 +124,20 @@ listarAcervo() {
   }
 }
 
+listarUsuarios(){
+  console.log("Usuários da Biblioteca:");
+  if (this.usuarios.length > 0) {
+    this.usuarios.forEach(usuario => {
+      console.log(`Nome: ${usuario.nome} | Registro Acadêmico: ${usuario.registroAcademico} | Data de Nascimento: ${usuario.dataNascimento}`);
+    });
+  } else {
+    console.log("Não há usuários cadastrados");
+  }
+}
+
   adicionarUsuario(usuario) {
     this.usuarios.push(usuario)
-    console.log('usuario' + usuario.nome + 'foi adicionado a biblioteca')
+    console.log('usuario ' + usuario.nome + ' foi adicionado a biblioteca')
   }
 
   emprestarItem(itemCode, academicRegistration) {
@@ -160,20 +170,7 @@ listarAcervo() {
   }
 }
 
-
-
-const livro = new Livro()
-const revista = new Revista()
-
-
-const usuario1 = new Usuario(" Vitor Eduardo ", "505071", "2002-08-08")
-const usuario2 = new Usuario(" Jaqueline ", "404012", "2002-02-03")
-
 const biblioteca = new Biblioteca()
-
-biblioteca.adicionarUsuario(usuario1)
-biblioteca.adicionarUsuario(usuario2)
-
 
 function adicionarLivro() {
   const titulo = prompt('Digite o título do livro');
@@ -202,14 +199,19 @@ function adicionarRevista() {
 function adicionarUsuario() {
     const nome = prompt('Digite o nome do usuário');
     const registroAcademico = prompt('Digite o registro acadêmico do usuário');
-    const dataNascimento = prompt('Digite a data de nascimento do usuário');
+    const dataNascimento = prompt('Digite a data de nascimento do usuário (ano-mes-dia)');
 
     const usuario = new Usuario(nome, registroAcademico, dataNascimento);
 
     biblioteca.adicionarUsuario(usuario);
 }
 
+function emprestarItem(){
+    const itemCode = prompt('Digite o código do item');
+    const academicRegistration = prompt('Digite o registro académico do usuário');
 
+    biblioteca.emprestarItem(itemCode,academicRegistration);
+}
 
 async function obterAcervo() {
     try {
@@ -241,3 +243,4 @@ async function iniciarAcervo() {
 
     await biblioteca.popularAcervo(dadosAcervos,dadosUsuarios);
 }
+iniciarAcervo()
