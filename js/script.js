@@ -50,15 +50,20 @@ class Livro extends EntidadeBibliografica {
   }
 
   informacoes() {
-    console.log("Código: " + this.codigo);
-    console.log("Título: " + this.titulo);
-    console.log("Autor: " + this.autor);
-    console.log("Ano de publicação: " + this.anoPublicacao);
-    console.log("Emprestado: " + this.emprestado);
-    console.log("Usuário emprestado: " + this.usuarioEmprestimo);
-    console.log("Gênero: " + this.genero);
-    alert("ler console.log");
-  }
+  const statusEmprestimo = this.emprestado ? "Sim" : "Não";
+  const usuarioEmprestimo = this.usuarioEmprestimo ? this.usuarioEmprestimo.nome : "Nenhum";
+
+  alert(
+    `Informações do Livro:\n` +
+    `Código: ${this.codigo}\n` +
+    `Título: ${this.titulo}\n` +
+    `Autor: ${this.autor}\n` +
+    `Ano de publicação: ${this.anoPublicacao}\n` +
+    `Emprestado: ${statusEmprestimo}\n` +
+    `Usuário emprestado: ${usuarioEmprestimo}\n` +
+    `Gênero: ${this.genero}`
+  );
+}
 }
 
 class Revista extends EntidadeBibliografica {
@@ -66,17 +71,21 @@ class Revista extends EntidadeBibliografica {
     super(codigo,titulo, autor, anoPublicacao);
     this.edicao = edicao;
   }
+informacoes() {
+  const statusEmprestimo = this.emprestado ? "Sim" : "Não";
+  const usuarioEmprestimo = this.usuarioEmprestimo ? this.usuarioEmprestimo : "Nenhum";
 
-  informacoes() {
-    console.log("Código: " + this.codigo);
-    console.log("Título: " + this.titulo);
-    console.log("Autor: " + this.autor);
-    console.log("Ano de publicação: " + this.anoPublicacao);
-    console.log("Emprestado: " + this.emprestado);
-    console.log("Usuário emprestado: " + this.usuarioEmprestimo);
-    console.log("Edição: " + this.edicao);
-    alert("ler console.log");
-  }
+  alert(
+    `Informações da Revista:\n` +
+    `Código: ${this.codigo}\n` +
+    `Título: ${this.titulo}\n` +
+    `Autor: ${this.autor}\n` +
+    `Ano de publicação: ${this.anoPublicacao}\n` +
+    `Emprestado: ${statusEmprestimo}\n` +
+    `Usuário emprestado: ${usuarioEmprestimo.nome}\n` +
+    `Edição: ${this.edicao}`
+  );
+}
 }
 
 class Usuario {
@@ -124,6 +133,7 @@ listarAcervo() {
   } else {
     console.log("Acervo vazio");
   }
+  alert('Ver o console')
   console.log(biblioteca)
 }
 
@@ -146,22 +156,22 @@ adicionarUsuario(usuario) {
 }
 
 emprestarItem(itemCode, academicRegistration) {
-    const itemParaEmprestar = this.acervo.find(item => item.codigo === itemCode);
+  const itemParaEmprestar = this.acervo.find(item => item.codigo.toLowerCase() === itemCode.toLowerCase());
 
-    if (itemParaEmprestar) {
-      const usuarioEmpretimo = this.usuarios.find(user => user.registroAcademico === academicRegistration);
+  if (itemParaEmprestar) {
+    const usuarioEmpretimo = this.usuarios.find(user => user.registroAcademico === academicRegistration);
 
-      if (usuarioEmpretimo) {
-        itemParaEmprestar.emprestar(usuarioEmpretimo);
-        console.log('Item emprestado');
-        alert('Item emprestado para ' + usuarioEmpretimo.nome);
-      } else {
-        console.log('Usuário ' + academicRegistration + ' não encontrado');
-      }
+    if (usuarioEmpretimo) {
+      itemParaEmprestar.emprestar(usuarioEmpretimo);
+      console.log('Item emprestado');
+      alert('Item emprestado para ' + usuarioEmpretimo.nome);
     } else {
-      console.log('Item ' + itemCode + ' não encontrado');
+      console.log('Usuário ' + academicRegistration + ' não encontrado');
     }
-    console.log(biblioteca)
+  } else {
+    console.log('Item ' + itemCode + ' não encontrado');
+  }
+  console.log(biblioteca)
 }
 
 devolverItem(codigo) {
@@ -224,6 +234,17 @@ function emprestarItem(){
 function devolverItem(){
     const codigo = prompt('Digite o código do item');
     biblioteca.devolverItem(codigo);
+}
+
+function informacoes(){
+  const codigo = prompt('Digite o codigo do item')
+  const item = biblioteca.acervo.find(item => item.codigo.toLowerCase() === codigo.toLowerCase())
+
+  if(!item){
+    alert('Item não encontrado')
+  }else{
+    item.informacoes()
+  }
 }
 
 async function obterAcervo() {
