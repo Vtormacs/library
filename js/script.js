@@ -142,9 +142,10 @@ listarUsuarios(){
 adicionarUsuario(usuario) {
     this.usuarios.push(usuario)
     console.log('usuario ' + usuario.nome + ' foi adicionado a biblioteca')
+    console.log(biblioteca)
 }
 
-emprestarItem(itemCode, academicRegistration,usuario) {
+emprestarItem(itemCode, academicRegistration) {
     const itemParaEmprestar = this.acervo.find(item => item.codigo === itemCode);
 
     if (itemParaEmprestar) {
