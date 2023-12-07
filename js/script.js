@@ -1,3 +1,15 @@
+const generoLivro = {
+  TEXTOS_RELIGIOSOS: "Textos Religiosos",
+  TERROR: "Terror",
+  COMEDIA: "Comédia",
+  COMEDIA_ROMANTICA: "Comédia Romantica",
+  SUSPENCE: "Suspence",
+  DRAMA: "Drama",
+  HISTORIA: "Historia",
+  POLICIAL: "Policial",
+  FICCAO_CIENTIFICA: "Ficção Cientifica"
+}
+
 class EntidadeBibliografica {
   constructor(codigo,titulo, autor, anoPublicacao) {
     this.codigo = codigo;
@@ -32,9 +44,9 @@ class EntidadeBibliografica {
 }
 
 class Livro extends EntidadeBibliografica {
-  constructor(codigo,titulo, autor, anoPublicacao, genero) {
+  constructor(codigo,titulo, autor, anoPublicacao, generoLivro) {
     super(codigo,titulo, autor, anoPublicacao);
-    this.genero = genero;
+    this.genero = generoLivro;
   }
 
   informacoes() {
@@ -75,34 +87,22 @@ class Usuario {
   }
 }
 
-const generoLivro = {
-  TEXTOS_RELIGIOSOS: "Textos Religiosos",
-  TERROR: "Terror",
-  COMEDIA: "Comédia",
-  COMEDIA_ROMANTICA: "Comédia Romantica",
-  SUSPENCE: "Suspence",
-  DRAMA: "Drama",
-  HISTORIA: "Historia",
-  POLICIAL: "Policial",
-  FICCAO_CIENTIFICA: "Ficção Cientifica"
-}
-
 class Biblioteca {
   constructor() {
     this.acervo = [];
     this.usuarios = [];
   }
 
-  popularAcervo(APIreturnAcervo, APIreturnUsuario) {
+popularAcervo(APIreturnAcervo, APIreturnUsuario) {
   APIreturnAcervo.forEach(item => {
     if (item.entidadeBibliografica === "Livro") {
-      this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.isEmprestado, item.usuarioEmprestado, item.genero));
+      this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.emprestado, item.usuarioEmprestado, item.genero));
     } else if (item.entidadeBibliografica === "Revista") {
-      this.acervo.push(new Revista(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.isEmprestado, item.usuarioEmprestado, item.edicao));
+      this.acervo.push(new Revista(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.emprestado, item.usuarioEmprestado, item.edicao));
     }
   });
 
-  APIreturnUsuario.forEach(usuario => {
+APIreturnUsuario.forEach(usuario => {
     this.usuarios.push(new Usuario(usuario.nome, usuario.registroAcademico, usuario.dataNascimento));
   });
 }
@@ -110,6 +110,7 @@ class Biblioteca {
 adicionarItem(item) {
   this.acervo.push(item);
   console.log('Item adicionado ao acervo:', item);
+  console.log(biblioteca)
 }
 
 listarAcervo() {
@@ -117,11 +118,12 @@ listarAcervo() {
   if (this.acervo.length > 0) {
     this.acervo.forEach(item => {
       const infoUsuario = item.usuarioEmprestado ? `Emprestado para ${item.usuarioEmprestado.nome}` : 'Disponível';
-      console.log(`Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicacao} | ${infoUsuario}`);
+      console.log(`Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicacao} | Genero: ${item.genero} | ${infoUsuario}`);
     });
   } else {
     console.log("Acervo vazio");
   }
+  console.log(biblioteca)
 }
 
 listarUsuarios(){
@@ -133,14 +135,15 @@ listarUsuarios(){
   } else {
     console.log("Não há usuários cadastrados");
   }
+  console.log(biblioteca)
 }
 
-  adicionarUsuario(usuario) {
+adicionarUsuario(usuario) {
     this.usuarios.push(usuario)
     console.log('usuario ' + usuario.nome + ' foi adicionado a biblioteca')
-  }
+}
 
-  emprestarItem(itemCode, academicRegistration) {
+emprestarItem(itemCode, academicRegistration,usuario) {
     const itemParaEmprestar = this.acervo.find(item => item.codigo === itemCode);
 
     if (itemParaEmprestar) {
@@ -149,15 +152,17 @@ listarUsuarios(){
       if (usuarioEmpretimo) {
         itemParaEmprestar.emprestar(usuarioEmpretimo);
         console.log('Item emprestado');
+        alert('Item emprestado para ' + usuarioEmpretimo.nome);
       } else {
         console.log('Usuário ' + academicRegistration + ' não encontrado');
       }
     } else {
       console.log('Item ' + itemCode + ' não encontrado');
     }
-  }
+    console.log(biblioteca)
+}
 
-  devolverItem() {
+devolverItem(codigo) {
     const item = this.acervo.find(item => item.codigo === codigo)
 
     if (item) {
@@ -167,7 +172,8 @@ listarUsuarios(){
     else {
       console.log("Item " + codigo + " não encontrado");
     }
-  }
+    console.log(biblioteca)
+}
 }
 
 const biblioteca = new Biblioteca()
@@ -193,7 +199,7 @@ function adicionarRevista() {
 
     const revista = new Revista(codigo, titulo, autor, ano, edicao);
 
-    biblioteca.adicionarRevista(revista);
+    biblioteca.adicionarItem(revista);
 }
 
 function adicionarUsuario() {
@@ -211,6 +217,11 @@ function emprestarItem(){
     const academicRegistration = prompt('Digite o registro académico do usuário');
 
     biblioteca.emprestarItem(itemCode,academicRegistration);
+}
+
+function devolverItem(){
+    const codigo = prompt('Digite o código do item');
+    biblioteca.devolverItem(codigo);
 }
 
 async function obterAcervo() {
