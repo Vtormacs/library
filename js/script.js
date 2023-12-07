@@ -44,9 +44,9 @@ class EntidadeBibliografica {
 }
 
 class Livro extends EntidadeBibliografica {
-  constructor(codigo,titulo, autor, anoPublicacao, generoLivro) {
+  constructor(codigo,titulo, autor, anoPublicacao, genero) {
     super(codigo,titulo, autor, anoPublicacao);
-    this.genero = generoLivro;
+    this.genero = genero;
   }
 
   informacoes() {
@@ -94,32 +94,18 @@ class Biblioteca {
   }
 
 popularAcervo(APIreturnAcervo, APIreturnUsuario) {
-  const acervoMap = new Map(this.acervo.map(item => [item.codigo, item]));
-
-  APIreturnAcervo.forEach(item => {
-    if (!acervoMap.has(item.codigo)) {
-      let novoItem;
+    APIreturnAcervo.forEach(item => {
       if (item.entidadeBibliografica === "Livro") {
-        novoItem = new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.emprestado, item.usuarioEmprestado, item.genero);
+        this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.genero, item.emprestado, item.usuarioEmprestado));
       } else if (item.entidadeBibliografica === "Revista") {
-        novoItem = new Revista(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.emprestado, item.usuarioEmprestado, item.edicao);
+        this.acervo.push(new Revista(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.edicao, item.emprestado, item.usuarioEmprestado));
       }
-      if (novoItem) {
-        this.acervo.push(novoItem);
-        acervoMap.set(item.codigo, novoItem);
-      }
-    }
-  });
-
-  const usuariosMap = new Map(this.usuarios.map(usuario => [usuario.registroAcademico, usuario]));
-
+    });
+  
   APIreturnUsuario.forEach(usuario => {
-    if (!usuariosMap.has(usuario.registroAcademico)) {
-      const novoUsuario = new Usuario(usuario.nome, usuario.registroAcademico, usuario.dataNascimento);
-      this.usuarios.push(novoUsuario);
-      usuariosMap.set(usuario.registroAcademico, novoUsuario);
-    }
-  });
+      this.usuarios.push(new Usuario(usuario.nome, usuario.registroAcademico, usuario.dataNascimento));
+    });
+    console.log(biblioteca)
 }
 
 adicionarItem(item) {
@@ -133,7 +119,7 @@ listarAcervo() {
   if (this.acervo.length > 0) {
     this.acervo.forEach(item => {
       const infoUsuario = item.usuarioEmprestado ? `Emprestado para ${item.usuarioEmprestado.nome}` : 'Disponível';
-      console.log(`Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicacao} | Genero: ${item.genero} | ${infoUsuario}`);
+      console.log(`Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicacao}  | ${infoUsuario}`);
     });
   } else {
     console.log("Acervo vazio");
