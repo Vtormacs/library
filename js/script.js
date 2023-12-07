@@ -94,16 +94,31 @@ class Biblioteca {
   }
 
 popularAcervo(APIreturnAcervo, APIreturnUsuario) {
+  const acervoMap = new Map(this.acervo.map(item => [item.codigo, item]));
+
   APIreturnAcervo.forEach(item => {
-    if (item.entidadeBibliografica === "Livro") {
-      this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.emprestado, item.usuarioEmprestado, item.genero));
-    } else if (item.entidadeBibliografica === "Revista") {
-      this.acervo.push(new Revista(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.emprestado, item.usuarioEmprestado, item.edicao));
+    if (!acervoMap.has(item.codigo)) {
+      let novoItem;
+      if (item.entidadeBibliografica === "Livro") {
+        novoItem = new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.emprestado, item.usuarioEmprestado, item.genero);
+      } else if (item.entidadeBibliografica === "Revista") {
+        novoItem = new Revista(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.emprestado, item.usuarioEmprestado, item.edicao);
+      }
+      if (novoItem) {
+        this.acervo.push(novoItem);
+        acervoMap.set(item.codigo, novoItem);
+      }
     }
   });
 
-APIreturnUsuario.forEach(usuario => {
-    this.usuarios.push(new Usuario(usuario.nome, usuario.registroAcademico, usuario.dataNascimento));
+  const usuariosMap = new Map(this.usuarios.map(usuario => [usuario.registroAcademico, usuario]));
+
+  APIreturnUsuario.forEach(usuario => {
+    if (!usuariosMap.has(usuario.registroAcademico)) {
+      const novoUsuario = new Usuario(usuario.nome, usuario.registroAcademico, usuario.dataNascimento);
+      this.usuarios.push(novoUsuario);
+      usuariosMap.set(usuario.registroAcademico, novoUsuario);
+    }
   });
 }
 
