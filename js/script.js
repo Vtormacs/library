@@ -97,10 +97,10 @@ class Usuario {
 }
 
 class Biblioteca {
-  constructor() {
+constructor() {
     this.acervo = [];
     this.usuarios = [];
-  }
+}
 
 popularAcervo(APIreturnAcervo, APIreturnUsuario) {
     APIreturnAcervo.forEach(item => {
@@ -120,15 +120,15 @@ popularAcervo(APIreturnAcervo, APIreturnUsuario) {
 adicionarItem(item) {
   this.acervo.push(item);
   console.log('Item adicionado ao acervo:', item);
-  console.log(biblioteca)
 }
 
 listarAcervo() {
   console.log("Livros da Biblioteca:");
   if (this.acervo.length > 0) {
     this.acervo.forEach(item => {
-      const infoUsuario = item.usuarioEmprestado ? `Emprestado para ${item.usuarioEmprestado.nome}` : 'Disponível';
-      console.log(`Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicacao}  | ${infoUsuario}`);
+      const isEmprestado = item.emprestado && item.usuarioEmprestado;
+const infoUsuario = isEmprestado ? `Emprestado para ${item.usuarioEmprestado.nome}` : 'Disponível';
+console.log(`Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicacao} | ${infoUsuario}`);
     });
   } else {
     console.log("Acervo vazio");
@@ -152,7 +152,6 @@ listarUsuarios(){
 adicionarUsuario(usuario) {
     this.usuarios.push(usuario)
     console.log('usuario ' + usuario.nome + ' foi adicionado a biblioteca')
-    console.log(biblioteca)
 }
 
 emprestarItem(itemCode, academicRegistration) {
@@ -171,7 +170,7 @@ emprestarItem(itemCode, academicRegistration) {
   } else {
     console.log('Item ' + itemCode + ' não encontrado');
   }
-  console.log(biblioteca)
+  
 }
 
 devolverItem(codigo) {
@@ -184,11 +183,8 @@ devolverItem(codigo) {
     else {
       console.log("Item " + codigo + " não encontrado");
     }
-    console.log(biblioteca)
 }
 }
-
-const biblioteca = new Biblioteca()
 
 function adicionarLivro() {
   const titulo = prompt('Digite o título do livro');
@@ -276,5 +272,20 @@ async function iniciarAcervo() {
     const dadosUsuarios = await obterUsuario();
 
     await biblioteca.popularAcervo(dadosAcervos,dadosUsuarios);
+
 }
+const biblioteca = new Biblioteca()
 iniciarAcervo()
+
+const usuarioTeste = new Usuario('Usuario Teste','404022','2000-04-03')
+biblioteca.adicionarUsuario(usuarioTeste)
+
+const livroTeste = new Livro('1233', 'Titulo Teste', 'Autor Teste', '2020', "Terror")
+biblioteca.adicionarItem(livroTeste)
+
+const codigoTeste = '1233'
+const RATeste = '404022'
+biblioteca.emprestarItem(codigoTeste,RATeste);
+
+const codigoTeste2 = '1233'
+biblioteca.devolverItem(codigoTeste2)
