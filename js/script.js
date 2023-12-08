@@ -73,7 +73,7 @@ class Revista extends EntidadeBibliografica {
   }
 informacoes() {
   const statusEmprestimo = this.emprestado ? "Sim" : "Não";
-  const usuarioEmprestimo = this.usuarioEmprestimo ? this.usuarioEmprestimo : "Nenhum";
+  const usuarioEmprestimo = this.usuarioEmprestimo ? this.usuarioEmprestimo.nome : "Nenhum";
 
   alert(
     `Informações da Revista:\n` +
@@ -82,7 +82,7 @@ informacoes() {
     `Autor: ${this.autor}\n` +
     `Ano de publicação: ${this.anoPublicacao}\n` +
     `Emprestado: ${statusEmprestimo}\n` +
-    `Usuário emprestado: ${usuarioEmprestimo.nome}\n` +
+    `Usuário emprestado: ${usuarioEmprestimo}\n` +
     `Edição: ${this.edicao}`
   );
 }
@@ -120,15 +120,16 @@ popularAcervo(APIreturnAcervo, APIreturnUsuario) {
 adicionarItem(item) {
   this.acervo.push(item);
   console.log('Item adicionado ao acervo:', item);
+  console.log(biblioteca)
 }
 
 listarAcervo() {
   console.log("Livros da Biblioteca:");
   if (this.acervo.length > 0) {
     this.acervo.forEach(item => {
-      const isEmprestado = item.emprestado && item.usuarioEmprestado;
-const infoUsuario = isEmprestado ? `Emprestado para ${item.usuarioEmprestado.nome}` : 'Disponível';
-console.log(`Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicacao} | ${infoUsuario}`);
+
+console.log(`Código: ${item.codigo} | Título: ${item.titulo} | Autor: ${item.autor} | Ano de publicação: ${item.anoPublicacao} `);
+
     });
   } else {
     console.log("Acervo vazio");
@@ -152,6 +153,7 @@ listarUsuarios(){
 adicionarUsuario(usuario) {
     this.usuarios.push(usuario)
     console.log('usuario ' + usuario.nome + ' foi adicionado a biblioteca')
+    console.log(biblioteca)
 }
 
 emprestarItem(itemCode, academicRegistration) {
@@ -170,6 +172,7 @@ emprestarItem(itemCode, academicRegistration) {
   } else {
     console.log('Item ' + itemCode + ' não encontrado');
   }
+  console.log(biblioteca)
   
 }
 
@@ -183,6 +186,7 @@ devolverItem(codigo) {
     else {
       console.log("Item " + codigo + " não encontrado");
     }
+    console.log(biblioteca)
 }
 }
 
@@ -277,15 +281,4 @@ async function iniciarAcervo() {
 const biblioteca = new Biblioteca()
 iniciarAcervo()
 
-const usuarioTeste = new Usuario('Usuario Teste','404022','2000-04-03')
-biblioteca.adicionarUsuario(usuarioTeste)
 
-const livroTeste = new Livro('1233', 'Titulo Teste', 'Autor Teste', '2020', "Terror")
-biblioteca.adicionarItem(livroTeste)
-
-const codigoTeste = '1233'
-const RATeste = '404022'
-biblioteca.emprestarItem(codigoTeste,RATeste);
-
-const codigoTeste2 = '1233'
-biblioteca.devolverItem(codigoTeste2)
